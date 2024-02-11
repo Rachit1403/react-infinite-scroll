@@ -5,24 +5,24 @@ function App() {
     const [pageNumber, setPageNumber] = useState(1);
     const { loading, error, books, hasMore } = useBookSearch(query, pageNumber);
 
-    const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-            setPageNumber((prevPageNumber) => prevPageNumber + 1);
-        }
-    });
+    // const observer = new IntersectionObserver((entries) => {
+    //     if (entries[0].isIntersecting && hasMore) {
+    //         setPageNumber((prevPageNumber) => prevPageNumber + 1);
+    //     }
+    // });
 
     function handleChange(e) {
         setQuery(e.target.value);
         setPageNumber(1);
     }
 
-    const lastBookElement = useCallback(
-        (node) => {
-            console.log(node);
-            observer.observe(node);
-        },
-        [loading, hasMore]
-    );
+    // const lastBookElement = useCallback(
+    //     (node) => {
+    //         console.log(node);
+    //         observer.observe(node);
+    //     },
+    //     [loading, hasMore]
+    // );
 
     return (
         <>
