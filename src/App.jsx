@@ -1,9 +1,10 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef} from "react";
 import useBookSearch from "./useBookSearch";
 function App() {
     const [query, setQuery] = useState("");
     const [pageNumber, setPageNumber] = useState(1);
     const { loading, error, books, hasMore } = useBookSearch(query, pageNumber);
+    const observer = useRef();
 
     // const observer = new IntersectionObserver((entries) => {
     //     if (entries[0].isIntersecting && hasMore) {
@@ -16,13 +17,19 @@ function App() {
         setPageNumber(1);
     }
 
-    // const lastBookElement = useCallback(
-    //     (node) => {
-    //         console.log(node);
-    //         observer.observe(node);
-    //     },
-    //     [loading, hasMore]
-    // );
+    const lastBookElementRef = useCallback(
+        (node) => {
+            if(loading) return;
+            if(observer.current) observer.current.disconnect;
+            observer.current = new IntersectionObserver(entries => {
+              if(entries[0].isIntersecting && hasMore){
+                setPageNumber((prevPageNumner) => prevPageNumner + 1);
+              }
+            })
+            if(node) observer.current.observe(node);
+        },
+        [loading, hasMore]
+    );
 
     return (
         <>
@@ -30,7 +37,7 @@ function App() {
             {books.map((book, index) => {
                 if (books.length == index + 1) {
                     return (
-                        <div ref={lastBookElement} key={book}>
+                        <div ref={lastBookElementRef} key={book}>
                             {" "}
                             Book {index + 1} : {book}
                         </div>
