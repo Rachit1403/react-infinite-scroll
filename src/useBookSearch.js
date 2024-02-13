@@ -8,8 +8,8 @@ const useBookSearch = (query, pageNumber) => {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-      setBooks([]);
-    }, [query])
+        setBooks([]);
+    }, [query]);
 
     useEffect(() => {
         setLoading(true);
@@ -31,7 +31,6 @@ const useBookSearch = (query, pageNumber) => {
                         ]),
                     ];
                 });
-                console.log(books);
                 setHasMore(response.data.docs.length > 0);
                 setLoading(false);
             })
@@ -43,7 +42,7 @@ const useBookSearch = (query, pageNumber) => {
         return () => cancel();
     }, [query, pageNumber]);
 
-    return {loading, error, books, hasMore};
+    return { loading, error, books, hasMore };
 };
 
 export default useBookSearch;

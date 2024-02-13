@@ -1,16 +1,10 @@
-import { useState, useCallback, useRef} from "react";
+import { useState, useCallback, useRef } from "react";
 import useBookSearch from "./useBookSearch";
 function App() {
     const [query, setQuery] = useState("");
     const [pageNumber, setPageNumber] = useState(1);
     const { loading, error, books, hasMore } = useBookSearch(query, pageNumber);
     const observer = useRef();
-
-    // const observer = new IntersectionObserver((entries) => {
-    //     if (entries[0].isIntersecting && hasMore) {
-    //         setPageNumber((prevPageNumber) => prevPageNumber + 1);
-    //     }
-    // });
 
     function handleChange(e) {
         setQuery(e.target.value);
@@ -19,14 +13,14 @@ function App() {
 
     const lastBookElementRef = useCallback(
         (node) => {
-            if(loading) return;
-            if(observer.current) observer.current.disconnect;
-            observer.current = new IntersectionObserver(entries => {
-              if(entries[0].isIntersecting && hasMore){
-                setPageNumber((prevPageNumner) => prevPageNumner + 1);
-              }
-            })
-            if(node) observer.current.observe(node);
+            if (loading) return;
+            if (observer.current) observer.current.disconnect;
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                    setPageNumber((prevPageNumner) => prevPageNumner + 1);
+                }
+            });
+            if (node) observer.current.observe(node);
         },
         [loading, hasMore]
     );
